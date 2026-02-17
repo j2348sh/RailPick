@@ -123,29 +123,32 @@ def load_all_data():
     data['device_models'] = device_models
     data['provider_devices'] = provider_devices
 
-    # tickets 구간 분석
+    # ⭐ ticket_stats 컬렉션에서 누적 통계 로드 (삭제된 티켓도 포함)
+    ticket_stats = list(db.collection('ticket_stats').stream())
     routes = {}
     train_types = {}
     seat_classes = {}
-    for u in users:
-        tkts = list(db.collection('users').document(u.id).collection('tickets').stream())
-        for t in tkts:
-            td = t.to_dict()
-            dep = td.get('departureStation', '')
-            arr = td.get('arrivalStation', '')
-            tt = td.get('trainType', '')
-            sc = td.get('seatClass', '')
-            st_type = td.get('serviceType', '')
-            if dep and arr:
-                route = f"{dep} → {arr}"
-                routes[route] = routes.get(route, 0) + 1
-            if tt:
-                train_types[tt] = train_types.get(tt, 0) + 1
-            if sc:
-                seat_classes[sc] = seat_classes.get(sc, 0) + 1
+    stats_by_status = {'ACTIVE': 0, 'REFUNDED': 0, 'DELETED': 0}
+    for ts_doc in ticket_stats:
+        td = ts_doc.to_dict()
+        dep = td.get('dep', '')
+        arr = td.get('arr', '')
+        tt = td.get('trainType', '')
+        sc = td.get('seatClass', '')
+        status = td.get('status', 'ACTIVE')
+        if dep and arr:
+            route = f"{dep} → {arr}"
+            routes[route] = routes.get(route, 0) + 1
+        if tt:
+            train_types[tt] = train_types.get(tt, 0) + 1
+        if sc:
+            seat_classes[sc] = seat_classes.get(sc, 0) + 1
+        stats_by_status[status] = stats_by_status.get(status, 0) + 1
     data['routes'] = routes
     data['train_types'] = train_types
     data['seat_classes'] = seat_classes
+    data['ticket_stats_total'] = len(ticket_stats)
+    data['ticket_stats_by_status'] = stats_by_status
 
     # 신규 기기 추이 (created_at 기반)
     new_device_daily = {}
@@ -434,13 +437,14 @@ st.divider()
 # ========== 컬렉션 요약 ==========
 st.subheader("🗄️ Firestore 컬렉션 요약")
 summary_data = {
-    '컬렉션': ['users', 'device_trials', 'consent_logs', 'email_mappings'],
-    '문서 수': [len(data['users']), data['trials_total'], data['consent_total'], data['email_count']],
+    '컬렉션': ['users', 'device_trials', 'consent_logs', 'email_mappings', 'ticket_stats'],
+    '문서 수': [len(data['users']), data['trials_total'], data['consent_total'], data['email_count'], data.get('ticket_stats_total', 0)],
     '설명': [
         f"소셜 로그인 사용자 (기기 {data['devices_total']}대, 티켓 {data['tickets_total']}건)",
         f"무료 체험 기기 (7일 활성: {data['recent_7d']}, 30일: {data['recent_30d']})",
         f"스마트 예약 동의 (동의: {data['consent_agreed']}, 미동의: {data['consent_total'] - data['consent_agreed']})",
-        "소셜 로그인 이메일 매핑"
+        "소셜 로그인 이메일 매핑",
+        f"비식별 누적 통계 (활성: {data.get('ticket_stats_by_status', {}).get('ACTIVE', 0)}, 환불: {data.get('ticket_stats_by_status', {}).get('REFUNDED', 0)}, 삭제: {data.get('ticket_stats_by_status', {}).get('DELETED', 0)})"
     ]
 }
 st.dataframe(pd.DataFrame(summary_data), use_container_width=True, hide_index=True)
