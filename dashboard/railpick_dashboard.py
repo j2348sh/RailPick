@@ -311,6 +311,8 @@ with daily_col:
             fig.update_layout(height=400, margin=dict(t=20, b=20))
             st.plotly_chart(fig, use_container_width=True)
 
+st.divider()
+
 # ========== SRT vs 코레일 / 열차 종류 / 좌석 등급 (3열) ==========
 srt_col, train_col, seat_col = st.columns(3)
 
