@@ -368,7 +368,7 @@ if data['users']:
     df_users = pd.DataFrame(data['users'])
     df_users = df_users[['name', 'provider', 'devices', 'tickets']].rename(columns={
         'name': '이름', 'provider': '로그인', 'devices': '기기 수', 'tickets': '티켓 수'
-    })
+    }).sort_values('티켓 수', ascending=False)
     st.dataframe(df_users, use_container_width=True, hide_index=True)
 
 st.divider()
