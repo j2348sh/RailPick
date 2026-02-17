@@ -105,17 +105,24 @@ def load_all_data():
 
     # devices 모델 분석
     device_models = {}
+    provider_devices = {}  # 로그인 제공자별 기기 수
     for u in users:
+        ud = next((x for x in user_list if x['id'] == u.id), None)
+        provider = ud['provider'] if ud else 'unknown'
         devs = list(db.collection('users').document(u.id).collection('devices').stream())
+        dev_count = len(devs)
+        provider_devices.setdefault(provider, []).append(dev_count)
         for d in devs:
             dd = d.to_dict()
             model = dd.get('deviceModel', 'unknown')
             device_models[model] = device_models.get(model, 0) + 1
     data['device_models'] = device_models
+    data['provider_devices'] = provider_devices
 
     # tickets 구간 분석
     routes = {}
     train_types = {}
+    seat_classes = {}
     for u in users:
         tkts = list(db.collection('users').document(u.id).collection('tickets').stream())
         for t in tkts:
@@ -123,12 +130,27 @@ def load_all_data():
             dep = td.get('departureStation', '')
             arr = td.get('arrivalStation', '')
             tt = td.get('trainType', 'unknown')
+            sc = td.get('seatClass', 'unknown')
+            st_type = td.get('serviceType', 'unknown')
             if dep and arr:
                 route = f"{dep} → {arr}"
                 routes[route] = routes.get(route, 0) + 1
             train_types[tt] = train_types.get(tt, 0) + 1
+            seat_classes[sc] = seat_classes.get(sc, 0) + 1
     data['routes'] = routes
     data['train_types'] = train_types
+    data['seat_classes'] = seat_classes
+
+    # 신규 기기 추이 (created_at 기반)
+    new_device_daily = {}
+    for t in trials:
+        td = t.to_dict()
+        created = td.get('created_at') or td.get('first_install_time')
+        if created and hasattr(created, 'timestamp'):
+            ts = datetime.fromtimestamp(created.timestamp(), tz=timezone.utc)
+            day_key = ts.strftime('%Y-%m-%d')
+            new_device_daily[day_key] = new_device_daily.get(day_key, 0) + 1
+    data['new_device_daily'] = new_device_daily
 
     return data
 
@@ -270,6 +292,73 @@ if train_types:
                  color_discrete_sequence=px.colors.qualitative.Set2, hole=0.4)
     fig.update_layout(height=250, margin=dict(t=20, b=20, l=20, r=20))
     st.plotly_chart(fig, use_container_width=True)
+
+st.divider()
+
+# ========== 신규 기기 추이 + 제공자별 기기 수 ==========
+trend_col, provider_col = st.columns(2)
+
+# 신규 기기 가입 추이
+with trend_col:
+    st.subheader("📈 신규 기기 가입 추이 (최근 30일)")
+    new_daily = data.get('new_device_daily', {})
+    if new_daily:
+        cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        filtered = {k: v for k, v in sorted(new_daily.items()) if k >= cutoff}
+        if filtered:
+            df = pd.DataFrame(list(filtered.items()), columns=['날짜', '신규 기기'])
+            fig = px.area(df, x='날짜', y='신규 기기', color_discrete_sequence=['#03C75A'])
+            fig.update_layout(height=300, margin=dict(t=20, b=20))
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("최근 30일 데이터 없음")
+
+# 로그인 제공자별 평균 기기 수
+with provider_col:
+    st.subheader("📊 제공자별 평균 기기 수")
+    prov_devs = data.get('provider_devices', {})
+    if prov_devs:
+        prov_stats = []
+        for provider, counts in prov_devs.items():
+            avg = sum(counts) / len(counts)
+            prov_stats.append({'제공자': provider, '평균 기기 수': round(avg, 1), '사용자 수': len(counts)})
+        df_prov = pd.DataFrame(prov_stats)
+        fig = px.bar(df_prov, x='제공자', y='평균 기기 수', text='평균 기기 수',
+                     color='제공자', color_discrete_map={'kakao': '#FEE500', 'google': '#4285F4', 'naver': '#03C75A'})
+        fig.update_layout(height=300, margin=dict(t=20, b=20), showlegend=False)
+        fig.update_traces(textposition='outside')
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(df_prov, use_container_width=True, hide_index=True)
+
+st.divider()
+
+# ========== SRT vs KTX 비율 ==========
+srt_ktx_col, seat_col = st.columns(2)
+
+with srt_ktx_col:
+    st.subheader("🚄 SRT vs KTX 이용 비율")
+    train_types_data = data.get('train_types', {})
+    if train_types_data:
+        srt_count = sum(v for k, v in train_types_data.items() if 'SRT' in k.upper())
+        ktx_count = sum(v for k, v in train_types_data.items() if 'KTX' in k.upper() or 'ITX' in k.upper())
+        other_count = sum(v for k, v in train_types_data.items() if 'SRT' not in k.upper() and 'KTX' not in k.upper() and 'ITX' not in k.upper())
+        srt_ktx = {'SRT': srt_count, 'KTX/ITX': ktx_count}
+        if other_count > 0:
+            srt_ktx['기타'] = other_count
+        fig = px.pie(names=list(srt_ktx.keys()), values=list(srt_ktx.values()),
+                     color_discrete_map={'SRT': '#582b52', 'KTX/ITX': '#0052A4', '기타': '#888'},
+                     hole=0.4)
+        fig.update_layout(height=300, margin=dict(t=20, b=20, l=20, r=20))
+        st.plotly_chart(fig, use_container_width=True)
+
+with seat_col:
+    st.subheader("💺 좌석 등급 분포")
+    seat_data = data.get('seat_classes', {})
+    if seat_data:
+        fig = px.pie(names=list(seat_data.keys()), values=list(seat_data.values()),
+                     color_discrete_sequence=['#0052A4', '#FFC107', '#888'], hole=0.4)
+        fig.update_layout(height=300, margin=dict(t=20, b=20, l=20, r=20))
+        st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
