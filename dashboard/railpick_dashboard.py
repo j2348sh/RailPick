@@ -47,15 +47,14 @@ def load_all_data():
 
     # users
     ADMIN_EMAILS = {'j2348sh@gmail.com', 'j2348sh@naver.com', 'j23488sh@gmail.com', 'j234888sh@gmail.com', 'j234ish@gmail.com'}
-    users = list(db.collection('users').stream())
+    all_users = list(db.collection('users').stream())
+    # ⭐ 관리자 제외 (이후 모든 루프에서 자동 제외)
+    users = [u for u in all_users if u.to_dict().get('email', '') not in ADMIN_EMAILS]
     user_list = []
     devices_total = 0
     tickets_total = 0
     for u in users:
         d = u.to_dict()
-        email = d.get('email', '')
-        if email in ADMIN_EMAILS:
-            continue  # 관리자 계정 제외
         subcols = list(u.reference.collections())
         dev_count = 0
         tkt_count = 0
@@ -110,7 +109,7 @@ def load_all_data():
 
     # devices 모델 분석
     device_models = {}
-    provider_devices = {}  # 로그인 제공자별 기기 수
+    provider_devices = {}
     for u in users:
         ud = next((x for x in user_list if x['id'] == u.id), None)
         provider = ud['provider'] if ud else 'unknown'
