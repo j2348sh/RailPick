@@ -25,13 +25,17 @@ def init_firebase():
         # Streamlit Cloud: Secrets에서 서비스 계정 키 로드
         # 로컬: 파일에서 로드
         try:
-            key_dict = json.loads(st.secrets["firebase"]["service_account_key"])
-        except Exception:
-            # 로컬 폴백
-            cred = credentials.Certificate('railpick-firebase-adminsdk-fbsvc-0f8224f790.json')
-            firebase_admin.initialize_app(cred)
-            return firestore.client(database_id='railpick')
-        cred = credentials.Certificate(key_dict)
+            key_json = st.secrets["firebase"]["service_account_key"]
+            key_dict = json.loads(key_json)
+            cred = credentials.Certificate(key_dict)
+        except Exception as e:
+            # 로컬 폴백 - 여러 파일명 시도
+            import glob
+            key_files = glob.glob('railpick-firebase-adminsdk-*.json') + glob.glob('../railpick-firebase-adminsdk-*.json')
+            if not key_files:
+                st.error(f"Firebase 키를 찾을 수 없습니다. Secrets 설정을 확인하세요.\n에러: {e}")
+                st.stop()
+            cred = credentials.Certificate(key_files[0])
         firebase_admin.initialize_app(cred)
     return firestore.client(database_id='railpick')
 
