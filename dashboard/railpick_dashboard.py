@@ -22,11 +22,9 @@ st.set_page_config(
 def init_firebase():
     if not firebase_admin._apps:
         import json
-        # Streamlit Cloud: Secrets에서 서비스 계정 키 로드
-        # 로컬: 파일에서 로드
         try:
-            key_json = st.secrets["firebase"]["service_account_key"]
-            key_dict = json.loads(key_json)
+            # Streamlit Cloud: Secrets에서 서비스 계정 키를 개별 필드로 로드
+            key_dict = dict(st.secrets["firebase_service_account"])
             cred = credentials.Certificate(key_dict)
         except Exception as e:
             # 로컬 폴백 - 여러 파일명 시도
