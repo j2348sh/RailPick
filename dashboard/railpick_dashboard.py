@@ -377,17 +377,18 @@ st.divider()
 srt_ktx_col, seat_col = st.columns(2)
 
 with srt_ktx_col:
-    st.subheader("🚄 SRT vs KTX 이용 비율")
+    st.subheader("🚄 SRT vs 코레일 이용 비율")
     train_types_data = data.get('train_types', {})
     if train_types_data:
         srt_count = sum(v for k, v in train_types_data.items() if 'SRT' in k.upper())
-        ktx_count = sum(v for k, v in train_types_data.items() if 'KTX' in k.upper() or 'ITX' in k.upper())
-        other_count = sum(v for k, v in train_types_data.items() if 'SRT' not in k.upper() and 'KTX' not in k.upper() and 'ITX' not in k.upper())
-        srt_ktx = {'SRT': srt_count, 'KTX/ITX': ktx_count}
+        korail_keywords = ['KTX', 'ITX', '무궁화', '새마을']
+        korail_count = sum(v for k, v in train_types_data.items() if any(kw in k for kw in korail_keywords))
+        other_count = sum(v for k, v in train_types_data.items() if 'SRT' not in k.upper() and not any(kw in k for kw in korail_keywords))
+        srt_ktx = {'SRT': srt_count, '코레일': korail_count}
         if other_count > 0:
             srt_ktx['기타'] = other_count
         fig = px.pie(names=list(srt_ktx.keys()), values=list(srt_ktx.values()),
-                     color_discrete_map={'SRT': '#582b52', 'KTX/ITX': '#0052A4', '기타': '#888'},
+                     color_discrete_map={'SRT': '#582b52', '코레일': '#0052A4', '기타': '#888'},
                      hole=0.4)
         fig.update_layout(height=300, margin=dict(t=20, b=20, l=20, r=20))
         st.plotly_chart(fig, use_container_width=True)
