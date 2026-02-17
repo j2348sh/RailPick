@@ -46,12 +46,16 @@ def load_all_data():
     data = {}
 
     # users
+    ADMIN_EMAILS = {'j2348sh@gmail.com', 'j2348sh@naver.com', 'j23488sh@gmail.com', 'j234888sh@gmail.com', 'j234ish@gmail.com'}
     users = list(db.collection('users').stream())
     user_list = []
     devices_total = 0
     tickets_total = 0
     for u in users:
         d = u.to_dict()
+        email = d.get('email', '')
+        if email in ADMIN_EMAILS:
+            continue  # 관리자 계정 제외
         subcols = list(u.reference.collections())
         dev_count = 0
         tkt_count = 0
