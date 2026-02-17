@@ -64,6 +64,7 @@ def load_all_data():
         user_list.append({
             'id': u.id,
             'name': d.get('displayName', ''),
+            'email': d.get('email', ''),
             'provider': d.get('lastLoginProvider', 'unknown'),
             'last_login': d.get('lastLogin'),
             'devices': dev_count,
@@ -366,9 +367,25 @@ st.divider()
 st.subheader("👤 로그인 사용자 목록")
 if data['users']:
     df_users = pd.DataFrame(data['users'])
-    df_users = df_users[['name', 'provider', 'devices', 'tickets']].rename(columns={
-        'name': '이름', 'provider': '로그인', 'devices': '기기 수', 'tickets': '티켓 수'
-    }).sort_values('티켓 수', ascending=False)
+    df_users = df_users[['name', 'email', 'provider', 'devices', 'tickets', 'last_login']].copy()
+    # last_login 포맷팅
+    def format_login(val):
+        if val is None:
+            return '-'
+        try:
+            if hasattr(val, 'timestamp'):
+                ts = datetime.fromtimestamp(val.timestamp(), tz=timezone.utc)
+            elif isinstance(val, (int, float)):
+                ts = datetime.fromtimestamp(val / 1000 if val > 1e12 else val, tz=timezone.utc)
+            else:
+                return str(val)
+            return ts.strftime('%Y-%m-%d %H:%M')
+        except Exception:
+            return str(val)
+    df_users['last_login'] = df_users['last_login'].apply(format_login)
+    df_users = df_users.rename(columns={
+        'name': '이름', 'email': '이메일', 'provider': '로그인', 'devices': '기기 수', 'tickets': '티켓 수', 'last_login': '최근 로그인'
+    }).sort_values('최근 로그인', ascending=False)
     st.dataframe(df_users, use_container_width=True, hide_index=True)
 
 st.divider()
