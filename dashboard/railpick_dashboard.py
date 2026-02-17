@@ -236,25 +236,9 @@ with chart_col2:
 
 st.divider()
 
-# 일별 활성 기기 차트
-st.subheader("📈 일별 활성 기기 (최근 30일)")
-daily = data['daily_active']
-if daily:
-    # 최근 30일만 필터
-    cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-    filtered = {k: v for k, v in sorted(daily.items()) if k >= cutoff}
-    if filtered:
-        df = pd.DataFrame(list(filtered.items()), columns=['날짜', '활성 기기'])
-        fig = px.bar(df, x='날짜', y='활성 기기', color_discrete_sequence=['#0052A4'])
-        fig.update_layout(height=300, margin=dict(t=20, b=20))
-        st.plotly_chart(fig, use_container_width=True)
+# ========== 기기 모델 분포 + 일별 활성 기기 ==========
+model_col, daily_col = st.columns(2)
 
-st.divider()
-
-# ========== 기기 모델 + 인기 구간 ==========
-model_col, route_col = st.columns(2)
-
-# 기기 모델 분포
 with model_col:
     st.subheader("📱 기기 모델 분포")
     models = data.get('device_models', {})
@@ -315,32 +299,61 @@ with model_col:
         fig.update_layout(height=400, margin=dict(t=20, b=20), yaxis={'categoryorder': 'total ascending'})
         st.plotly_chart(fig, use_container_width=True)
 
-# 인기 구간 TOP 10
-with route_col:
-    st.subheader("🚄 인기 구간 TOP 10")
-    routes = data.get('routes', {})
-    if routes:
-        sorted_routes = sorted(routes.items(), key=lambda x: -x[1])[:10]
-        df_routes = pd.DataFrame(sorted_routes, columns=['구간', '티켓 수'])
-        fig = px.bar(df_routes, x='티켓 수', y='구간', orientation='h', color_discrete_sequence=['#0052A4'])
-        fig.update_layout(height=400, margin=dict(t=20, b=20), yaxis={'categoryorder': 'total ascending'})
+with daily_col:
+    st.subheader("📈 일별 활성 기기 (최근 30일)")
+    daily = data['daily_active']
+    if daily:
+        cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        filtered = {k: v for k, v in sorted(daily.items()) if k >= cutoff}
+        if filtered:
+            df = pd.DataFrame(list(filtered.items()), columns=['날짜', '활성 기기'])
+            fig = px.bar(df, x='날짜', y='활성 기기', color_discrete_sequence=['#0052A4'])
+            fig.update_layout(height=400, margin=dict(t=20, b=20))
+            st.plotly_chart(fig, use_container_width=True)
+
+# ========== SRT vs 코레일 / 열차 종류 / 좌석 등급 (3열) ==========
+srt_col, train_col, seat_col = st.columns(3)
+
+with srt_col:
+    st.subheader("🚄 SRT vs 코레일")
+    train_types_data = data.get('train_types', {})
+    if train_types_data:
+        srt_count = sum(v for k, v in train_types_data.items() if 'SRT' in k.upper())
+        korail_keywords = ['KTX', 'ITX', '무궁화', '새마을']
+        korail_count = sum(v for k, v in train_types_data.items() if any(kw in k for kw in korail_keywords))
+        other_count = sum(v for k, v in train_types_data.items() if 'SRT' not in k.upper() and not any(kw in k for kw in korail_keywords))
+        srt_ktx = {'SRT': srt_count, '코레일': korail_count}
+        if other_count > 0:
+            srt_ktx['기타'] = other_count
+        fig = px.pie(names=list(srt_ktx.keys()), values=list(srt_ktx.values()),
+                     color_discrete_map={'SRT': '#582b52', '코레일': '#0052A4', '기타': '#888'},
+                     hole=0.4)
+        fig.update_layout(height=280, margin=dict(t=20, b=20, l=10, r=10))
         st.plotly_chart(fig, use_container_width=True)
 
-# 열차 종류 분포
-train_types = data.get('train_types', {})
-if train_types:
+with train_col:
     st.subheader("🚆 열차 종류 분포")
-    fig = px.pie(names=list(train_types.keys()), values=list(train_types.values()),
-                 color_discrete_sequence=px.colors.qualitative.Set2, hole=0.4)
-    fig.update_layout(height=250, margin=dict(t=20, b=20, l=20, r=20))
-    st.plotly_chart(fig, use_container_width=True)
+    train_types = data.get('train_types', {})
+    if train_types:
+        fig = px.pie(names=list(train_types.keys()), values=list(train_types.values()),
+                     color_discrete_sequence=px.colors.qualitative.Set2, hole=0.4)
+        fig.update_layout(height=280, margin=dict(t=20, b=20, l=10, r=10))
+        st.plotly_chart(fig, use_container_width=True)
+
+with seat_col:
+    st.subheader("💺 좌석 등급 분포")
+    seat_data = data.get('seat_classes', {})
+    if seat_data:
+        fig = px.pie(names=list(seat_data.keys()), values=list(seat_data.values()),
+                     color_discrete_sequence=['#0052A4', '#FFC107', '#888'], hole=0.4)
+        fig.update_layout(height=280, margin=dict(t=20, b=20, l=10, r=10))
+        st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
 # ========== 신규 기기 추이 + 제공자별 기기 수 ==========
 trend_col, provider_col = st.columns(2)
 
-# 신규 기기 가입 추이
 with trend_col:
     st.subheader("📈 신규 기기 가입 추이 (최근 30일)")
     new_daily = data.get('new_device_daily', {})
@@ -355,7 +368,6 @@ with trend_col:
         else:
             st.info("최근 30일 데이터 없음")
 
-# 로그인 제공자별 평균 기기 수
 with provider_col:
     st.subheader("📊 제공자별 평균 기기 수")
     prov_devs = data.get('provider_devices', {})
@@ -376,34 +388,15 @@ with provider_col:
 
 st.divider()
 
-# ========== SRT vs KTX 비율 ==========
-srt_ktx_col, seat_col = st.columns(2)
-
-with srt_ktx_col:
-    st.subheader("🚄 SRT vs 코레일 이용 비율")
-    train_types_data = data.get('train_types', {})
-    if train_types_data:
-        srt_count = sum(v for k, v in train_types_data.items() if 'SRT' in k.upper())
-        korail_keywords = ['KTX', 'ITX', '무궁화', '새마을']
-        korail_count = sum(v for k, v in train_types_data.items() if any(kw in k for kw in korail_keywords))
-        other_count = sum(v for k, v in train_types_data.items() if 'SRT' not in k.upper() and not any(kw in k for kw in korail_keywords))
-        srt_ktx = {'SRT': srt_count, '코레일': korail_count}
-        if other_count > 0:
-            srt_ktx['기타'] = other_count
-        fig = px.pie(names=list(srt_ktx.keys()), values=list(srt_ktx.values()),
-                     color_discrete_map={'SRT': '#582b52', '코레일': '#0052A4', '기타': '#888'},
-                     hole=0.4)
-        fig.update_layout(height=300, margin=dict(t=20, b=20, l=20, r=20))
-        st.plotly_chart(fig, use_container_width=True)
-
-with seat_col:
-    st.subheader("💺 좌석 등급 분포")
-    seat_data = data.get('seat_classes', {})
-    if seat_data:
-        fig = px.pie(names=list(seat_data.keys()), values=list(seat_data.values()),
-                     color_discrete_sequence=['#0052A4', '#FFC107', '#888'], hole=0.4)
-        fig.update_layout(height=300, margin=dict(t=20, b=20, l=20, r=20))
-        st.plotly_chart(fig, use_container_width=True)
+# ========== 인기 구간 TOP 10 ==========
+st.subheader("🚄 인기 구간 TOP 10")
+routes = data.get('routes', {})
+if routes:
+    sorted_routes = sorted(routes.items(), key=lambda x: -x[1])[:10]
+    df_routes = pd.DataFrame(sorted_routes, columns=['구간', '티켓 수'])
+    fig = px.bar(df_routes, x='티켓 수', y='구간', orientation='h', color_discrete_sequence=['#0052A4'])
+    fig.update_layout(height=400, margin=dict(t=20, b=20), yaxis={'categoryorder': 'total ascending'})
+    st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 
