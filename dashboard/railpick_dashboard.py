@@ -269,15 +269,27 @@ with model_col:
             # Galaxy Note
             'SM-N986N': 'Galaxy Note20 Ultra', 'SM-N981N': 'Galaxy Note20',
             # Galaxy Z Fold
+            'SM-F966N': 'Galaxy Z Fold7', 'SM-F958N': 'Galaxy Z Fold SE',
             'SM-F956N': 'Galaxy Z Fold6', 'SM-F946N': 'Galaxy Z Fold5', 'SM-F936N': 'Galaxy Z Fold4',
-            'SM-F926N': 'Galaxy Z Fold3', 'SM-F916N': 'Galaxy Z Fold2',
+            'SM-F926N': 'Galaxy Z Fold3', 'SM-F916N': 'Galaxy Z Fold2', 'SM-F900N': 'Galaxy Fold',
             # Galaxy Z Flip
+            'SM-F751N': 'Galaxy Z Flip7', 'SM-F761N': 'Galaxy Z Flip7 FE',
             'SM-F741N': 'Galaxy Z Flip6', 'SM-F731N': 'Galaxy Z Flip5', 'SM-F721N': 'Galaxy Z Flip4',
             'SM-F711N': 'Galaxy Z Flip3', 'SM-F700N': 'Galaxy Z Flip',
             # Galaxy A 시리즈
-            'SM-A556N': 'Galaxy A55 5G', 'SM-A546N': 'Galaxy A54 5G', 'SM-A536N': 'Galaxy A53 5G',
-            'SM-A525N': 'Galaxy A52', 'SM-A515N': 'Galaxy A51', 'SM-A715N': 'Galaxy A71',
-            'SM-A346N': 'Galaxy A34', 'SM-A256N': 'Galaxy A25', 'SM-A235F': 'Galaxy A23',
+            'SM-A566N': 'Galaxy A56 5G', 'SM-A556N': 'Galaxy A55 5G', 'SM-A546N': 'Galaxy A54 5G',
+            'SM-A536N': 'Galaxy A53 5G', 'SM-A528N': 'Galaxy A52s 5G', 'SM-A525N': 'Galaxy A52',
+            'SM-A515N': 'Galaxy A51', 'SM-A716N': 'Galaxy A51 5G', 'SM-A715N': 'Galaxy A71',
+            'SM-A736N': 'Galaxy A73 5G', 'SM-A725N': 'Galaxy A72 5G',
+            'SM-A366N': 'Galaxy A36 5G', 'SM-A356N': 'Galaxy A35 5G', 'SM-A346N': 'Galaxy A34 5G',
+            'SM-A336N': 'Galaxy A33 5G', 'SM-A326N': 'Galaxy A32 5G',
+            'SM-A266N': 'Galaxy A26 5G', 'SM-A256N': 'Galaxy A25 5G', 'SM-A246N': 'Galaxy A24 5G',
+            'SM-A236N': 'Galaxy A23 5G', 'SM-A235F': 'Galaxy A23', 'SM-A226N': 'Galaxy A22 5G',
+            'SM-A217N': 'Galaxy A21s', 'SM-A215N': 'Galaxy A21', 'SM-A205N': 'Galaxy A11',
+            'SM-A166N': 'Galaxy A16 5G', 'SM-A156N': 'Galaxy A15 5G', 'SM-A146N': 'Galaxy A14 5G',
+            'SM-A136N': 'Galaxy A13 5G', 'SM-A125N': 'Galaxy A12',
+            'SM-A415N': 'Galaxy A41', 'SM-A315N': 'Galaxy A31',
+            'SM-A025N': 'Galaxy A02s', 'SM-A022N': 'Galaxy A01 Core',
             # Galaxy Tab
             'SM-X920N': 'Galaxy Tab S10 Ultra', 'SM-X820N': 'Galaxy Tab S10+', 'SM-X526N': 'Galaxy Tab S10 FE',
             'SM-X910N': 'Galaxy Tab S9 Ultra', 'SM-X810N': 'Galaxy Tab S9+', 'SM-X710N': 'Galaxy Tab S9', 'SM-X510N': 'Galaxy Tab S9 FE',
