@@ -134,14 +134,16 @@ def load_all_data():
             td = t.to_dict()
             dep = td.get('departureStation', '')
             arr = td.get('arrivalStation', '')
-            tt = td.get('trainType', 'unknown')
-            sc = td.get('seatClass', 'unknown')
-            st_type = td.get('serviceType', 'unknown')
+            tt = td.get('trainType', '')
+            sc = td.get('seatClass', '')
+            st_type = td.get('serviceType', '')
             if dep and arr:
                 route = f"{dep} → {arr}"
                 routes[route] = routes.get(route, 0) + 1
-            train_types[tt] = train_types.get(tt, 0) + 1
-            seat_classes[sc] = seat_classes.get(sc, 0) + 1
+            if tt:
+                train_types[tt] = train_types.get(tt, 0) + 1
+            if sc:
+                seat_classes[sc] = seat_classes.get(sc, 0) + 1
     data['routes'] = routes
     data['train_types'] = train_types
     data['seat_classes'] = seat_classes
@@ -198,6 +200,8 @@ with chart_col1:
     providers = {}
     for u in data['users']:
         p = u['provider']
+        if p == 'unknown':
+            continue
         providers[p] = providers.get(p, 0) + 1
     if providers:
         fig = px.pie(
@@ -255,14 +259,30 @@ with model_col:
     if models:
         # 모델명 정리 (samsung SM-S928N → Galaxy S25 Ultra 등)
         model_names = {
-            'SM-S928N': 'Galaxy S25 Ultra', 'SM-S926N': 'Galaxy S25+', 'SM-S921N': 'Galaxy S25',
-            'SM-S918N': 'Galaxy S24 Ultra', 'SM-S916N': 'Galaxy S24+', 'SM-S911N': 'Galaxy S24',
-            'SM-S908N': 'Galaxy S23 Ultra', 'SM-S906N': 'Galaxy S23+', 'SM-S901N': 'Galaxy S23',
+            # Galaxy S 시리즈
+            'SM-S938N': 'Galaxy S25 Ultra', 'SM-S936N': 'Galaxy S25+', 'SM-S931N': 'Galaxy S25',
+            'SM-S928N': 'Galaxy S24 Ultra', 'SM-S926N': 'Galaxy S24+', 'SM-S921N': 'Galaxy S24', 'SM-S721N': 'Galaxy S24 FE',
+            'SM-S918N': 'Galaxy S23 Ultra', 'SM-S916N': 'Galaxy S23+', 'SM-S911N': 'Galaxy S23', 'SM-S711N': 'Galaxy S23 FE',
+            'SM-S908N': 'Galaxy S22 Ultra', 'SM-S906N': 'Galaxy S22+', 'SM-S901N': 'Galaxy S22',
+            'SM-G998N': 'Galaxy S21 Ultra', 'SM-G996N': 'Galaxy S21+', 'SM-G991N': 'Galaxy S21',
+            'SM-G988N': 'Galaxy S20 Ultra', 'SM-G986N': 'Galaxy S20+', 'SM-G981N': 'Galaxy S20', 'SM-G781N': 'Galaxy S20 FE',
+            # Galaxy Note
+            'SM-N986N': 'Galaxy Note20 Ultra', 'SM-N981N': 'Galaxy Note20',
+            # Galaxy Z Fold
             'SM-F956N': 'Galaxy Z Fold6', 'SM-F946N': 'Galaxy Z Fold5', 'SM-F936N': 'Galaxy Z Fold4',
+            'SM-F926N': 'Galaxy Z Fold3', 'SM-F916N': 'Galaxy Z Fold2',
+            # Galaxy Z Flip
             'SM-F741N': 'Galaxy Z Flip6', 'SM-F731N': 'Galaxy Z Flip5', 'SM-F721N': 'Galaxy Z Flip4',
-            'SM-A556N': 'Galaxy A55', 'SM-A546N': 'Galaxy A54', 'SM-A346N': 'Galaxy A34',
-            'SM-A235F': 'Galaxy A23', 'SM-A256N': 'Galaxy A25',
-            'SM-N986N': 'Galaxy Note20 Ultra', 'SM-G998N': 'Galaxy S21 Ultra',
+            'SM-F711N': 'Galaxy Z Flip3', 'SM-F700N': 'Galaxy Z Flip',
+            # Galaxy A 시리즈
+            'SM-A556N': 'Galaxy A55 5G', 'SM-A546N': 'Galaxy A54 5G', 'SM-A536N': 'Galaxy A53 5G',
+            'SM-A525N': 'Galaxy A52', 'SM-A515N': 'Galaxy A51', 'SM-A715N': 'Galaxy A71',
+            'SM-A346N': 'Galaxy A34', 'SM-A256N': 'Galaxy A25', 'SM-A235F': 'Galaxy A23',
+            # Galaxy Tab
+            'SM-X920N': 'Galaxy Tab S10 Ultra', 'SM-X820N': 'Galaxy Tab S10+', 'SM-X526N': 'Galaxy Tab S10 FE',
+            'SM-X910N': 'Galaxy Tab S9 Ultra', 'SM-X810N': 'Galaxy Tab S9+', 'SM-X710N': 'Galaxy Tab S9', 'SM-X510N': 'Galaxy Tab S9 FE',
+            'SM-X900N': 'Galaxy Tab S8 Ultra', 'SM-X800N': 'Galaxy Tab S8+', 'SM-X700N': 'Galaxy Tab S8',
+            'SM-T990N': 'Galaxy Tab S7+', 'SM-T975N': 'Galaxy Tab S7+', 'SM-T970N': 'Galaxy Tab S7', 'SM-T733N': 'Galaxy Tab S7 FE',
         }
         friendly = {}
         for raw, count in models.items():
@@ -273,7 +293,7 @@ with model_col:
             friendly[name] = friendly.get(name, 0) + count
         
         sorted_models = sorted(friendly.items(), key=lambda x: -x[1])
-        df_models = pd.DataFrame(sorted_models[:15], columns=['모델', '대수'])
+        df_models = pd.DataFrame([(k, v) for k, v in sorted_models[:15] if k != 'unknown'], columns=['모델', '대수'])
         fig = px.bar(df_models, x='대수', y='모델', orientation='h', color_discrete_sequence=['#6366F1'])
         fig.update_layout(height=400, margin=dict(t=20, b=20), yaxis={'categoryorder': 'total ascending'})
         st.plotly_chart(fig, use_container_width=True)
@@ -325,6 +345,8 @@ with provider_col:
     if prov_devs:
         prov_stats = []
         for provider, counts in prov_devs.items():
+            if provider == 'unknown':
+                continue
             avg = sum(counts) / len(counts)
             prov_stats.append({'제공자': provider, '평균 기기 수': round(avg, 1), '사용자 수': len(counts)})
         df_prov = pd.DataFrame(prov_stats)
