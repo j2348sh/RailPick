@@ -313,6 +313,43 @@ with daily_col:
 
 st.divider()
 
+# ========== 신규 기기 추이 + 제공자별 기기 수 ==========
+trend_col, provider_col = st.columns(2)
+
+with trend_col:
+    st.subheader("📈 신규 기기 가입 추이 (최근 30일)")
+    new_daily = data.get('new_device_daily', {})
+    if new_daily:
+        cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        filtered = {k: v for k, v in sorted(new_daily.items()) if k >= cutoff}
+        if filtered:
+            df = pd.DataFrame(list(filtered.items()), columns=['날짜', '신규 기기'])
+            fig = px.area(df, x='날짜', y='신규 기기', color_discrete_sequence=['#03C75A'])
+            fig.update_layout(height=300, margin=dict(t=20, b=20))
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("최근 30일 데이터 없음")
+
+with provider_col:
+    st.subheader("📊 제공자별 평균 기기 수")
+    prov_devs = data.get('provider_devices', {})
+    if prov_devs:
+        prov_stats = []
+        for provider, counts in prov_devs.items():
+            if provider == 'unknown':
+                continue
+            avg = sum(counts) / len(counts)
+            prov_stats.append({'제공자': provider, '평균 기기 수': round(avg, 1), '사용자 수': len(counts)})
+        df_prov = pd.DataFrame(prov_stats)
+        fig = px.bar(df_prov, x='제공자', y='평균 기기 수', text='평균 기기 수',
+                     color='제공자', color_discrete_map={'kakao': '#FEE500', 'google': '#4285F4', 'naver': '#03C75A'})
+        fig.update_layout(height=300, margin=dict(t=20, b=20), showlegend=False)
+        fig.update_traces(textposition='outside')
+        st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(df_prov, use_container_width=True, hide_index=True)
+
+st.divider()
+
 # ========== SRT vs 코레일 / 열차 종류 / 좌석 등급 (3열) ==========
 srt_col, train_col, seat_col = st.columns(3)
 
@@ -350,43 +387,6 @@ with seat_col:
                      color_discrete_sequence=['#0052A4', '#FFC107', '#888'], hole=0.4)
         fig.update_layout(height=280, margin=dict(t=20, b=20, l=10, r=10))
         st.plotly_chart(fig, use_container_width=True)
-
-st.divider()
-
-# ========== 신규 기기 추이 + 제공자별 기기 수 ==========
-trend_col, provider_col = st.columns(2)
-
-with trend_col:
-    st.subheader("📈 신규 기기 가입 추이 (최근 30일)")
-    new_daily = data.get('new_device_daily', {})
-    if new_daily:
-        cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-        filtered = {k: v for k, v in sorted(new_daily.items()) if k >= cutoff}
-        if filtered:
-            df = pd.DataFrame(list(filtered.items()), columns=['날짜', '신규 기기'])
-            fig = px.area(df, x='날짜', y='신규 기기', color_discrete_sequence=['#03C75A'])
-            fig.update_layout(height=300, margin=dict(t=20, b=20))
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("최근 30일 데이터 없음")
-
-with provider_col:
-    st.subheader("📊 제공자별 평균 기기 수")
-    prov_devs = data.get('provider_devices', {})
-    if prov_devs:
-        prov_stats = []
-        for provider, counts in prov_devs.items():
-            if provider == 'unknown':
-                continue
-            avg = sum(counts) / len(counts)
-            prov_stats.append({'제공자': provider, '평균 기기 수': round(avg, 1), '사용자 수': len(counts)})
-        df_prov = pd.DataFrame(prov_stats)
-        fig = px.bar(df_prov, x='제공자', y='평균 기기 수', text='평균 기기 수',
-                     color='제공자', color_discrete_map={'kakao': '#FEE500', 'google': '#4285F4', 'naver': '#03C75A'})
-        fig.update_layout(height=300, margin=dict(t=20, b=20), showlegend=False)
-        fig.update_traces(textposition='outside')
-        st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(df_prov, use_container_width=True, hide_index=True)
 
 st.divider()
 
