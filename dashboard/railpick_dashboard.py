@@ -260,7 +260,7 @@ with model_col:
         # 모델명 정리 (samsung SM-S928N → Galaxy S25 Ultra 등)
         model_names = {
             # Galaxy S 시리즈
-            'SM-S938N': 'Galaxy S25 Ultra', 'SM-S936N': 'Galaxy S25+', 'SM-S931N': 'Galaxy S25',
+            'SM-S938N': 'Galaxy S25 Ultra', 'SM-S937N': 'Galaxy S25 Edge', 'SM-S936N': 'Galaxy S25+', 'SM-S931N': 'Galaxy S25',
             'SM-S928N': 'Galaxy S24 Ultra', 'SM-S926N': 'Galaxy S24+', 'SM-S921N': 'Galaxy S24', 'SM-S721N': 'Galaxy S24 FE',
             'SM-S918N': 'Galaxy S23 Ultra', 'SM-S916N': 'Galaxy S23+', 'SM-S911N': 'Galaxy S23', 'SM-S711N': 'Galaxy S23 FE',
             'SM-S908N': 'Galaxy S22 Ultra', 'SM-S906N': 'Galaxy S22+', 'SM-S901N': 'Galaxy S22',
@@ -295,6 +295,9 @@ with model_col:
             'SM-X910N': 'Galaxy Tab S9 Ultra', 'SM-X810N': 'Galaxy Tab S9+', 'SM-X710N': 'Galaxy Tab S9', 'SM-X510N': 'Galaxy Tab S9 FE',
             'SM-X900N': 'Galaxy Tab S8 Ultra', 'SM-X800N': 'Galaxy Tab S8+', 'SM-X700N': 'Galaxy Tab S8',
             'SM-T990N': 'Galaxy Tab S7+', 'SM-T975N': 'Galaxy Tab S7+', 'SM-T970N': 'Galaxy Tab S7', 'SM-T733N': 'Galaxy Tab S7 FE',
+            'SM-X210N': 'Galaxy Tab A9+', 'SM-X200N': 'Galaxy Tab A8', 'SM-T220N': 'Galaxy Tab A7 Lite',
+            # Galaxy Z 특수 에디션
+            'SM-F99xN': 'Galaxy Z Tri-Fold',
         }
         friendly = {}
         for raw, count in models.items():
