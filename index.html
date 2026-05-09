@@ -177,6 +177,7 @@ a { color: #0070c9; }
 <h2>3. 제3자 서비스 제공자</h2>
 <p>앱은 Firebase Authentication, Firestore, Crashlytics, Remote Config, Cloud Messaging(FCM) 및 Google AdMob을 사용합니다. 각 서비스의 방침은 구글 정책 페이지에서 확인할 수 있습니다.</p>
 <p>또한 앱은 실시간 날씨 조회를 위해 OpenWeather API를 사용할 수 있습니다.</p>
+<p>앱 무결성 검증을 위해 <strong>Google Play Integrity API</strong> 를 사용합니다. 본 API는 단말기 무결성 검증을 위해 단말기 정보를 Google에 자동 송신하며, Google의 <a href="https://policies.google.com/privacy">개인정보 처리방침</a>이 적용됩니다. 변조 앱·에뮬레이터 차단을 통한 정품 사용자 보호 목적이며, 이름·전화번호 등 직접 식별 정보는 송신되지 않습니다.</p>
 
 <hr/>
 
@@ -203,6 +204,36 @@ a { color: #0070c9; }
 <li><strong>친구 추천 보상 동의 철회:</strong> 앱 설정 → 친구 추천 섹션 → "추천 보상 동의 철회" 옵션으로 철회할 수 있습니다. 철회 시 추천 메뉴는 비활성화되지만, 이미 적립된 보상 일수와 진행 중인 정산은 그대로 유지됩니다.</li>
 <li><strong>앱 데이터 삭제 및 초기화:</strong> 설정 메뉴를 통해 기기 내 모든 정보를 즉시 삭제할 수 있습니다.</li>
 </ul>
+
+<h3>5.1 항목별 동의 거부 시 결과</h3>
+<p>이용자는 항목별로 동의를 거부할 수 있으며, 거부 시 해당 기능만 비활성화되고 다른 기본 기능 (검색·승차권 조회 등) 은 정상 사용 가능합니다 (한국 약관규제법 §3 합리적 거부 보장).</p>
+<table style="border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.95em;">
+<thead>
+<tr style="background-color: #f0f0f0;">
+<th style="border: 1px solid #ccc; padding: 8px; text-align: left;">항목</th>
+<th style="border: 1px solid #ccc; padding: 8px; text-align: left;">동의 거부 시 결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>단말 무결성 검증 (Play Integrity)</strong> — 필수</td>
+<td style="border: 1px solid #ccc; padding: 8px;">신규 자동 예약 보조 가동 차단 + 신규 자동 갱신 구독 / 일회성 패스 결제 활성화 차단. 일반 검색·승차권 조회는 정상 사용 가능. <strong>이미 활성화된 구독·체험은 만료 시까지 정상 유지</strong>되며, 환불·해지 권리도 정상 행사 가능.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>기기 식별자 (deviceHash)</strong> — 필수</td>
+<td style="border: 1px solid #ccc; padding: 8px;">신규 자동 예약 보조 가동 차단 + 신규 결제 활성화 차단. 이미 활성화된 구독은 만료 시까지 정상 유지.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>결제 fingerprint</strong> — 선택</td>
+<td style="border: 1px solid #ccc; padding: 8px;">자동 환불 회수 정확도 일부 저하. 기타 모든 기능 정상.</td>
+</tr>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>친구 추천 보상 시스템</strong> — 선택</td>
+<td style="border: 1px solid #ccc; padding: 8px;">추천 코드 발급·입력·보상 지급 비활성화. 기타 모든 기능 (자동 예약 보조·결제·검색·승차권) 정상.</td>
+</tr>
+</tbody>
+</table>
+<p>이용자는 언제든지 앱 설정 화면에서 동의 항목을 재조정할 수 있습니다.</p>
 
 <hr/>
 
@@ -235,7 +266,12 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-05-10</p>
+<h2>9. 처리방침의 변경</h2>
+<p>본 개인정보처리방침은 법령·서비스 변경에 따라 개정될 수 있으며, 중요한 변경사항이 있는 경우 시행일 <strong>14일 전</strong>부터 앱 내 What's New 화면 또는 알림을 통해 사전 고지합니다. 단, 이용자에게 불리한 변경 (수집 항목·보유 기간·제3자 제공 추가 등) 의 경우 시행일 <strong>30일 전</strong>부터 고지하며, 변경된 내용에 동의하지 않는 이용자는 서비스 탈퇴 또는 동의 항목 철회를 통해 이용을 중단할 수 있습니다.</p>
+
+<hr/>
+
+<p><strong>최종 수정일:</strong> 2026-05-10 (Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9 갱신)</p>
 
 </body>
 </html>
