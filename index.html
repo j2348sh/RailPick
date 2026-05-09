@@ -24,7 +24,7 @@ a { color: #0070c9; }
 
 <h1>레일픽(RailPick) 개인정보처리방침</h1>
 
-<p><strong>적용일:</strong> 2026-03-20</p>
+<p><strong>적용일:</strong> 2026-05-10</p>
 
 <p>
 본 개인정보처리방침은 레일픽(RailPick) 애플리케이션(이하 "앱")이 제공하는 서비스와 관련하여, 사용자의 정보가 어떻게 수집·이용·보관·보호되는지를 설명합니다. 본 앱을 이용함으로써 본 개인정보처리방침에 동의하는 것으로 간주됩니다.
@@ -69,18 +69,27 @@ a { color: #0070c9; }
 <li><strong>중요: SRT/코레일 로그인 정보는 동기화되지 않으며, 여전히 각 기기에만 저장됩니다.</strong></li>
 </ul>
 
-<h3>1.3 스마트 예약 보조 기능 동의 관리 정보</h3>
+<h3>1.3 동의 관리 정보 (한국 개인정보보호법 §22 분리 동의)</h3>
 <div class="info">
-<p>앱은 <strong>스마트 예약 보조 기능</strong>을 제공합니다. 이 기능을 활성화하면 <strong>레일픽이 좌석 발견 즉시 예매 단계를 진행합니다.</strong> 안전한 기능 제공 및 사용자의 명시적 동의 확인을 위해 다음 정보를 수집합니다.</p>
+<p>앱은 한국 개인정보보호법에 따라 <strong>목적별로 동의를 분리</strong>하여 받습니다. 항목별로 동의/거부할 수 있으며, 거부 시 해당 기능만 비활성화되고 다른 기능 사용에는 영향이 없습니다.</p>
 </div>
 <ul>
+<li><strong>스마트 예약 보조 기능 동의 (필수, 안내문 포함):</strong> 좌석 발견 즉시 예매 단계 진행에 동의. 미동의 시 자동 좌석 감시·예매 보조 비활성화.</li>
+<li><strong>단말 무결성(Play Integrity) 검증 동의 (필수, 안내문 포함):</strong> 변조 앱·에뮬레이터 차단으로 정품 사용자 보호. 미동의 시 결제·체험·예약 기능 차단.</li>
+<li><strong>기기 식별자(deviceHash) 처리 동의 (필수, 안내문 포함):</strong> 무료 체험 1회 제한, 어뷰징 차단, 추천 보상 처리. SHA-256 해시 처리된 비식별 값.</li>
+<li><strong>결제 fingerprint 동의 (필수, 안내문 포함):</strong> 결제 orderId 해시. 환불·어뷰징 차단 정확도 향상 목적이며, 카드 정보는 처리하지 않습니다.</li>
+<li><strong>친구 추천 보상 동의 (선택):</strong> 추천 코드 발급/입력. 미동의 시 추천 메뉴만 비활성화. (자세한 내용은 §1.7)</li>
+</ul>
+<p>각 동의 항목별로 다음 정보가 함께 기록됩니다.</p>
+<ul>
 <li><strong>기기 식별자 해시:</strong> Android ID를 SHA-256으로 해시 처리한 값 (원본 Android ID는 저장되지 않음)</li>
-<li><strong>동의 여부 및 시각:</strong> 스마트 예약 보조 기능 동의/철회 시점의 타임스탬프</li>
+<li><strong>동의 여부 및 시각:</strong> 동의/철회 시점의 타임스탬프</li>
 <li><strong>동의 버전:</strong> 동의 시점의 동의 문구 버전 정보</li>
 <li><strong>앱 버전:</strong> 동의 시점의 앱 버전 정보</li>
 <li><strong>동의 이력:</strong> 동의 부여, 철회, 스위치 활성화/비활성화 등 이력 기록</li>
 </ul>
-<p>위 정보는 <strong>Firebase Firestore</strong>에 저장되며, 사용자가 스마트 예약 보조 기능 사용에 명시적으로 동의했음을 확인하고 관련 분쟁을 예방하기 위한 목적으로만 활용됩니다. 해시 처리된 기기 식별자는 다른 정보와 결합하여 개인을 식별하는 데 사용되지 않으며, 오직 동의 이력 관리 목적으로만 사용됩니다.</p>
+<p>위 정보는 <strong>Firebase Firestore</strong>에 저장되며, 사용자가 각 기능 사용에 명시적으로 동의했음을 확인하고 관련 분쟁을 예방하기 위한 목적으로만 활용됩니다. 해시 처리된 기기 식별자는 다른 정보와 결합하여 개인을 식별하는 데 사용되지 않으며, 오직 동의 이력 관리 목적으로만 사용됩니다.</p>
+<p>이용자는 앱 설정 → 개인정보처리방침 다이얼로그의 "단말 무결성 검증 및 식별자 처리" 토글, 친구 추천 섹션의 "동의 철회" 옵션을 통해 언제든 동의를 철회할 수 있습니다.</p>
 
 <h3>1.4 무료 체험 관리를 위한 기기 식별 정보</h3>
 <div class="highlight">
@@ -113,6 +122,37 @@ a { color: #0070c9; }
 <li><strong>광고 관련 정보:</strong> Google AdMob이 수집하는 광고 노출·클릭 관련 데이터</li>
 </ul>
 
+<h3>1.7 친구 추천 보상 처리 정보 (선택)</h3>
+<div class="info">
+<p>친구 추천 보상 시스템에 동의한 경우에만 다음 정보가 처리됩니다. 동의 거부 시 추천 메뉴 자체가 비활성화되며, 본 항목 정보도 처리되지 않습니다.</p>
+</div>
+<ul>
+<li><strong>추천 코드 식별자:</strong> 사용자별 발급된 6자리 무작위 코드 (예: RP-XXXXXX)</li>
+<li><strong>추천 이력:</strong> 추천 코드 발급/입력 시점, 보상 지급/회수 이력, 양쪽 모두 보상 일수, 처리 방식 (Google Play 구독 만료 연장 / 클라이언트 활성 일수 추가)</li>
+<li><strong>어뷰징 차단용 fingerprint:</strong>
+  <ul>
+  <li>신청 시점의 IP 주소 (24시간 내 같은 IP 다중 가입 차단 목적, 본인 식별 X)</li>
+  <li>기기 식별자 해시 (30일 내 같은 단말 다중 가입 차단 목적)</li>
+  </ul>
+</li>
+<li><strong>보상 처리 방식:</strong> 활성 자동 갱신 구독* 사용자의 경우 Google Play 의 <strong>구독 만료 시각을 직접 연장</strong>합니다 (Google Play Developer API의 subscriptionsv2.defer 호출). 사용자의 결제 정보, 카드 데이터, 결제 수단 정보는 처리하지 않습니다.</li>
+<li><strong>결제일 자동 연장 한도:</strong> Google Play 정책상 호출 시점 기준 <strong>누적 1년 한도</strong> 내에서 적용됩니다. 월 30일 보상 기준 누적 약 12명까지 자동 연장 형태로 지급되며, 한도 초과 시 그 이후 추천 보상은 자동으로 앱 내 프리미엄 활성 일수 추가 형태로 전환됩니다.</li>
+<li><strong>환불 시 보상 회수:</strong> Google Play 환불 알림(RTDN) 수신 시 자동으로 보상이 회수됩니다.</li>
+</ul>
+<p style="font-size: 0.9em; color: #666;"><em>* 자동 갱신 구독 = 월 / 3개월 / 6개월 / 연 단위 결제. <strong>24시간 이용권 / 7일 이용권은 제외</strong>입니다.</em></p>
+<p>저장 위치: <strong>Firebase Firestore</strong> (referral_codes / referrals / referral_rewards 컬렉션). 미동의 사용자에 대해서는 위 정보가 일체 생성되지 않습니다.</p>
+
+<h3>1.8 보안 검증 정보 (필수)</h3>
+<div class="info">
+<p>앱 변조·자동화 봇·결제 어뷰징을 차단하여 정품 사용자를 보호하기 위해 다음 보안 검증 정보가 처리됩니다. 본 검증은 사용자의 명시적 동의 후에만 수행됩니다.</p>
+</div>
+<ul>
+<li><strong>Play Integrity 검증 결과:</strong> Google Play가 제공하는 단말 무결성 verdict 값 (OK / TAMPERED / EMULATOR / UNKNOWN). 변조 앱이나 에뮬레이터 환경에서는 자동예약·결제·체험이 차단됩니다.</li>
+<li><strong>검증 이력:</strong> 호출 시점의 verdict, 단말 식별자 해시, 호출 컨텍스트 (워커 / 결제 / 추천 등) 가 30일간 보관되어 어뷰징 패턴 분석에 사용됩니다.</li>
+<li><strong>결제 fingerprint:</strong> 결제 orderId의 해시값. 환불 어뷰징 차단 정확도 향상 목적이며, <strong>카드번호·계좌·결제 수단 정보는 일체 처리하지 않습니다.</strong></li>
+</ul>
+<p>저장 위치: <strong>Firebase Firestore</strong> (integrity_verdicts / payments 컬렉션).</p>
+
 <hr/>
 
 <h2>2. 정보 수집 목적</h2>
@@ -122,7 +162,9 @@ a { color: #0070c9; }
 <li><strong>연결된 기기 관리:</strong> 사용자가 로그인한 기기 목록 확인 및 관리</li>
 <li><strong>푸시 알림 제공:</strong> 다른 기기에서 예약이 성공했을 때 Firebase Cloud Messaging을 통한 실시간 알림 전달</li>
 <li><strong>스마트 예약 보조 기능 제공:</strong> 사용자 동의 하에 좌석 발견 즉시 예매 단계 진행</li>
-<li><strong>스마트 예약 보조 동의 이력 관리:</strong> 투명한 서비스 운영 및 동의 여부 확인</li>
+<li><strong>분리 동의 이력 관리:</strong> 한국 개인정보보호법 §22 요건에 따른 항목별 동의 이력 보관 및 분쟁 예방</li>
+<li><strong>친구 추천 보상 시스템 운영:</strong> 추천 코드 발급, 보상 지급, 환불 시 보상 회수, 어뷰징 차단</li>
+<li><strong>보안 검증 및 어뷰징 차단:</strong> 변조 앱·에뮬레이터·자동화 봇 차단, 결제·체험·추천 어뷰징 차단</li>
 <li>무료 체험 기간 관리 및 오남용 방지</li>
 <li>앱 안정성 확보 및 오류 분석</li>
 <li>GPS 기반 가까운 역 추정 및 날씨·주변 정보 제공</li>
@@ -142,18 +184,23 @@ a { color: #0070c9; }
 <p>
 <strong>기기 내부 저장 정보:</strong> 앱 삭제 시까지 보관됩니다.<br/>
 <strong>동기화 데이터:</strong> 로그아웃 또는 계정 삭제 시 서버에서 삭제됩니다. 사용자는 설정에서 언제든지 동기화 데이터를 삭제할 수 있습니다.<br/>
-<strong>스마트 예약 보조 동의 이력:</strong> 서비스 이용 증명을 위해 Firebase Firestore에 영구 보관됩니다.<br/>
+<strong>분리 동의 이력 (스마트 예약 보조 / Integrity / deviceHash / 결제 fingerprint / 친구 추천):</strong> 서비스 이용 증명 및 분쟁 예방을 위해 Firebase Firestore에 영구 보관됩니다.<br/>
+<strong>친구 추천 이력 (referral_codes / referrals / referral_rewards):</strong> 어뷰징 차단 및 보상 회수 추적을 위해 Firebase Firestore에 영구 보관됩니다.<br/>
+<strong>보안 검증 이력 (integrity_verdicts):</strong> 어뷰징 패턴 분석을 위해 30일간 보관 후 자동 만료됩니다 (rolling window).<br/>
+<strong>결제 이력 (payments):</strong> 환불 처리 및 보상 회수 정확도를 위해 Firebase Firestore에 영구 보관됩니다.<br/>
 <strong>무료 체험 관리 정보:</strong> 오남용 방지를 위해 Firebase Firestore에 영구 보관됩니다.
 </p>
 
 <hr/>
 
-<h2>5. 이용자의 선택 및 권리</h2>
+<h2>5. 이용자의 선택 및 권리 (한국 개인정보보호법 §37 동의 철회권)</h2>
 <ul>
 <li><strong>로그인 선택:</strong> 로그인은 선택 사항이며, 로그인 없이도 모든 기본 기능을 사용할 수 있습니다.</li>
 <li><strong>동기화 데이터 삭제:</strong> 계정 관리에서 동기화 데이터를 삭제하거나 계정 연결을 해제할 수 있습니다.</li>
 <li><strong>기기 연결 해제:</strong> 더 이상 사용하지 않는 기기는 언제든지 연결 해제할 수 있습니다.</li>
-<li><strong>스마트 예약 보조 동의 철회:</strong> 앱 설정에서 기능을 비활성화하여 동의를 철회할 수 있습니다.</li>
+<li><strong>스마트 예약 보조 동의 철회:</strong> 앱 설정에서 토글 OFF 또는 동의 철회 옵션을 통해 동의를 철회할 수 있습니다.</li>
+<li><strong>보안 검증 동의 철회 (Integrity / deviceHash / 결제 fingerprint 통합):</strong> 앱 설정 → 개인정보처리방침 다이얼로그 → "단말 무결성 검증 및 식별자 처리" 토글 OFF 로 일괄 철회할 수 있습니다. 철회 시 자동예약·결제·체험이 비활성화되고 스마트 예약 보조 토글도 자동으로 꺼집니다.</li>
+<li><strong>친구 추천 보상 동의 철회:</strong> 앱 설정 → 친구 추천 섹션 → "추천 보상 동의 철회" 옵션으로 철회할 수 있습니다. 철회 시 추천 메뉴는 비활성화되지만, 이미 적립된 보상 일수와 진행 중인 정산은 그대로 유지됩니다.</li>
 <li><strong>앱 데이터 삭제 및 초기화:</strong> 설정 메뉴를 통해 기기 내 모든 정보를 즉시 삭제할 수 있습니다.</li>
 </ul>
 
@@ -188,7 +235,7 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-03-20</p>
+<p><strong>최종 수정일:</strong> 2026-05-10</p>
 
 </body>
 </html>
