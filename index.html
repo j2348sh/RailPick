@@ -152,6 +152,7 @@ a { color: #0070c9; }
 <li><strong>검증 이력:</strong> 호출 시점의 verdict, 단말 식별자 해시, 호출 컨텍스트 (워커 / 결제 / 추천 등) 가 30일간 보관되어 어뷰징 패턴 분석에 사용됩니다.</li>
 <li><strong>결제 fingerprint:</strong> 결제 orderId의 해시값. 환불 어뷰징 차단 정확도 향상 목적이며, <strong>카드번호·계좌·결제 수단 정보는 일체 처리하지 않습니다.</strong></li>
 </ul>
+<p><strong>결제 진입 시 동의 게이트 (2026-05-10 도입):</strong> 결제 화면 진입 시 본 보안 검증 동의 상태를 미리 안내하며, 미동의 사용자가 결제 시도 시 명시적 동의 다이얼로그를 표시합니다. 동의 거부 시 결제는 진행되지 않으며, 사용자 카드·결제 수단 정보 처리는 Google Play 가 직접 담당합니다 (앱은 일체 미처리). 자세한 동의 흐름은 <a href="terms.html#7.1">이용약관 §7.1</a> 참조.</p>
 <p>저장 위치: <strong>Firebase Firestore</strong> (integrity_verdicts / payments 컬렉션).</p>
 
 <hr/>
@@ -272,7 +273,7 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-05-10 (A안 친구 추천 정책 §1.7 갱신 — 친구 보상 14일 통일 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
+<p><strong>최종 수정일:</strong> 2026-05-10 (A안 친구 추천 정책 §1.7 / 결제 보안 동의 게이트 §1.8 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
 
 </body>
 </html>
