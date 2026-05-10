@@ -128,15 +128,16 @@ a { color: #0070c9; }
 </div>
 <ul>
 <li><strong>추천 코드 식별자:</strong> 사용자별 발급된 6자리 무작위 코드 (예: RP-XXXXXX)</li>
-<li><strong>추천 이력:</strong> 추천 코드 발급/입력 시점, 보상 지급/회수 이력, 양쪽 모두 보상 일수, 처리 방식 (Google Play 구독 만료 연장 / 클라이언트 활성 일수 추가)</li>
+<li><strong>추천 이력:</strong> 추천 코드 발급/입력 시점, 보상 지급/회수 이력, 추천인·친구 보상 일수, 처리 방식 (Google Play 구독 만료 연장 / 클라이언트 활성 일수 추가)</li>
 <li><strong>어뷰징 차단용 fingerprint:</strong>
   <ul>
   <li>신청 시점의 IP 주소 (24시간 내 같은 IP 다중 가입 차단 목적, 본인 식별 X)</li>
   <li>기기 식별자 해시 (30일 내 같은 단말 다중 가입 차단 목적)</li>
   </ul>
 </li>
-<li><strong>보상 처리 방식:</strong> 활성 자동 갱신 구독* 사용자의 경우 Google Play 의 <strong>구독 만료 시각을 직접 연장</strong>합니다 (Google Play Developer API의 subscriptionsv2.defer 호출). 사용자의 결제 정보, 카드 데이터, 결제 수단 정보는 처리하지 않습니다.</li>
-<li><strong>결제일 자동 연장 한도:</strong> Google Play 정책상 호출 시점 기준 <strong>누적 1년 한도</strong> 내에서 적용됩니다. 월 30일 보상 기준 누적 약 12명까지 자동 연장 형태로 지급되며, 한도 초과 시 그 이후 추천 보상은 자동으로 앱 내 프리미엄 활성 일수 추가 형태로 전환됩니다.</li>
+<li><strong>보상 지급 일수 (A안 정책):</strong> 친구는 추천인 상태와 무관하게 항상 <strong>14일 프리미엄 무료</strong>를 받습니다. 추천인은 본인이 유료 자동 갱신 구독자이면 <strong>30일</strong>, 그 외 (무료 사용자) 면 <strong>14일</strong> 프리미엄 무료를 받습니다.</li>
+<li><strong>보상 처리 방식:</strong> 활성 자동 갱신 구독* 사용자의 경우 Google Play 의 <strong>구독 만료 시각을 직접 연장</strong>합니다 (Google Play Developer API의 purchases.subscriptions.defer 호출). 사용자의 결제 정보, 카드 데이터, 결제 수단 정보는 처리하지 않습니다.</li>
+<li><strong>결제일 자동 연장 한도:</strong> 호출 시점 기준 <strong>누적 2년 한도</strong> 내에서 적용됩니다. 월 30일 보상 기준 누적 약 24명까지 자동 연장 형태로 지급되며, 한도 초과 시 그 이후 추천 보상은 자동으로 앱 내 프리미엄 활성 일수 추가 형태로 전환됩니다.</li>
 <li><strong>환불 시 보상 회수:</strong> Google Play 환불 알림(RTDN) 수신 시 자동으로 보상이 회수됩니다.</li>
 </ul>
 <p style="font-size: 0.9em; color: #666;"><em>* 자동 갱신 구독 = 월 / 3개월 / 6개월 / 연 단위 결제. <strong>24시간 이용권 / 7일 이용권은 제외</strong>입니다.</em></p>
@@ -271,7 +272,7 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-05-10 (Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9 갱신)</p>
+<p><strong>최종 수정일:</strong> 2026-05-10 (A안 친구 추천 정책 §1.7 갱신 — 친구 보상 14일 통일 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
 
 </body>
 </html>
