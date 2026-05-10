@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RailPick 친구 추천</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
+    padding: 40px 20px;
+    color: #222;
+    line-height: 1.6;
+  }
+  h1 { color: #6366F1; margin-bottom: 8px; }
+  .lead { color: #555; margin-top: 0; }
+  .code {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #4F46E5;
+    padding: 12px 18px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 16px 0;
+    letter-spacing: 0.05em;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #6366F1;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .note {
+    margin-top: 24px;
+    font-size: 0.85em;
+    color: #666;
+  }
+  .footer {
+    margin-top: 40px;
+    font-size: 0.8em;
+    color: #999;
+  }
+  .footer a { color: #6366F1; }
+</style>
+</head>
+<body>
+<noscript>
+  <h1>RailPick 친구 추천</h1>
+  <p>이 페이지는 자바스크립트가 필요합니다.</p>
+  <a class="btn" href="https://play.google.com/store/apps/details?id=com.j23488sh.railpick">앱 설치하기</a>
+</noscript>
+<script>
+  (function () {
+    var path = window.location.pathname || "";
+    var match = path.match(/\/RailPick\/r\/(RP-[A-HJ-NP-Z2-9]{6})/);
+    if (match) {
+      var code = match[1];
+      var safeCode = code.replace(/[^A-Z0-9-]/g, "");
+      var encodedCode = encodeURIComponent(safeCode);
+      document.body.innerHTML =
+        '<h1>RailPick 친구 추천</h1>' +
+        '<p class="lead">친구가 추천 코드를 보냈어요!</p>' +
+        '<div class="code">' + safeCode + '</div>' +
+        '<p>RailPick 앱을 설치하고 코드를 입력 후<br/>자동 갱신 구독을 결제하면<br/>' +
+        '<strong>프리미엄 14일이 추가로 지급됩니다.</strong></p>' +
+        '<a class="btn" href="https://play.google.com/store/apps/details?id=com.j23488sh.railpick&referrer=utm_source%3Dreferral%26utm_content%3D' + encodedCode + '">앱 설치하기</a>' +
+        '<p class="note">앱이 설치되어 있으면 자동으로 열립니다.<br/>안 열리면 위 버튼을 눌러주세요.</p>' +
+        '<p class="footer">RailPick - SRT/KTX 자동 예매 알림 앱<br/>' +
+        '<a href="https://j2348sh.github.io/RailPick/terms.html">이용약관</a> · ' +
+        '<a href="https://j2348sh.github.io/RailPick/">개인정보처리방침</a></p>';
+    } else {
+      document.body.innerHTML =
+        '<h1>404</h1>' +
+        '<p>페이지를 찾을 수 없습니다.</p>' +
+        '<a class="btn" href="https://j2348sh.github.io/RailPick/">RailPick 홈으로</a>';
+    }
+  })();
+</script>
+</body>
+</html>
