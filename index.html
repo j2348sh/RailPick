@@ -55,7 +55,7 @@ a { color: #0070c9; }
 <ul>
 <li>레일픽 앱에서 관리하는 승차권 정보</li>
 <li>앱 설정 (즐겨찾기, 알림 설정, 무음 시간대 등)</li>
-<li>스마트 예약보조 동의 여부</li>
+<li>스마트 예약 보조 동의 여부</li>
 </ul>
 </li>
 <li><strong>기기 관리 정보:</strong>
@@ -148,7 +148,7 @@ a { color: #0070c9; }
 <p>앱 변조·자동화 봇·결제 어뷰징을 차단하여 정품 사용자를 보호하기 위해 다음 보안 검증 정보가 처리됩니다. 본 검증은 사용자의 명시적 동의 후에만 수행됩니다.</p>
 </div>
 <ul>
-<li><strong>Play Integrity 검증 결과:</strong> Google Play가 제공하는 단말 무결성 verdict 값 (OK / TAMPERED / EMULATOR / UNKNOWN). 변조 앱이나 에뮬레이터 환경에서는 자동예약·결제·체험이 차단됩니다.</li>
+<li><strong>Play Integrity 검증 결과:</strong> Google Play가 제공하는 단말 무결성 verdict 값 (OK / TAMPERED / EMULATOR / UNKNOWN). 변조 앱이나 에뮬레이터 환경에서는 스마트 예약·결제·체험이 차단됩니다.</li>
 <li><strong>검증 이력:</strong> 호출 시점의 verdict, 단말 식별자 해시, 호출 컨텍스트 (워커 / 결제 / 추천 등) 가 30일간 보관되어 어뷰징 패턴 분석에 사용됩니다.</li>
 <li><strong>결제 fingerprint:</strong> 결제 orderId의 해시값. 환불 어뷰징 차단 정확도 향상 목적이며, <strong>카드번호·계좌·결제 수단 정보는 일체 처리하지 않습니다.</strong></li>
 </ul>
@@ -202,7 +202,7 @@ a { color: #0070c9; }
 <li><strong>동기화 데이터 삭제:</strong> 계정 관리에서 동기화 데이터를 삭제하거나 계정 연결을 해제할 수 있습니다.</li>
 <li><strong>기기 연결 해제:</strong> 더 이상 사용하지 않는 기기는 언제든지 연결 해제할 수 있습니다.</li>
 <li><strong>스마트 예약 보조 동의 철회:</strong> 앱 설정에서 토글 OFF 또는 동의 철회 옵션을 통해 동의를 철회할 수 있습니다.</li>
-<li><strong>보안 검증 동의 철회 (Integrity / deviceHash / 결제 fingerprint 통합):</strong> 앱 설정 → 개인정보처리방침 다이얼로그 → "단말 무결성 검증 및 식별자 처리" 토글 OFF 로 일괄 철회할 수 있습니다. 철회 시 자동예약·결제·체험이 비활성화되고 스마트 예약 보조 토글도 자동으로 꺼집니다.</li>
+<li><strong>보안 검증 동의 철회 (Integrity / deviceHash / 결제 fingerprint 통합):</strong> 앱 설정 → 개인정보처리방침 다이얼로그 → "단말 무결성 검증 및 식별자 처리" 토글 OFF 로 일괄 철회할 수 있습니다. 철회 시 스마트 예약·결제·체험이 비활성화되고 스마트 예약 보조 토글도 자동으로 꺼집니다.</li>
 <li><strong>친구 추천 보상 동의 철회:</strong> 앱 설정 → 친구 추천 섹션 → "추천 보상 동의 철회" 옵션으로 철회할 수 있습니다. 철회 시 추천 메뉴는 비활성화되지만, 이미 적립된 보상 일수와 진행 중인 정산은 그대로 유지됩니다.</li>
 <li><strong>앱 데이터 삭제 및 초기화:</strong> 설정 메뉴를 통해 기기 내 모든 정보를 즉시 삭제할 수 있습니다.</li>
 </ul>
@@ -219,11 +219,11 @@ a { color: #0070c9; }
 <tbody>
 <tr>
 <td style="border: 1px solid #ccc; padding: 8px;"><strong>단말 무결성 검증 (Play Integrity)</strong> — 필수</td>
-<td style="border: 1px solid #ccc; padding: 8px;">신규 자동 예약 보조 가동 차단 + 신규 자동 갱신 구독 / 일회성 패스 결제 활성화 차단. 일반 검색·승차권 조회는 정상 사용 가능. <strong>이미 활성화된 구독·체험은 만료 시까지 정상 유지</strong>되며, 환불·해지 권리도 정상 행사 가능.</td>
+<td style="border: 1px solid #ccc; padding: 8px;">신규 스마트 예약 보조 가동 차단 + 신규 자동 갱신 구독 / 일회성 패스 결제 활성화 차단. 일반 검색·승차권 조회는 정상 사용 가능. <strong>이미 활성화된 구독·체험은 만료 시까지 정상 유지</strong>되며, 환불·해지 권리도 정상 행사 가능.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #ccc; padding: 8px;"><strong>기기 식별자 (deviceHash)</strong> — 필수</td>
-<td style="border: 1px solid #ccc; padding: 8px;">신규 자동 예약 보조 가동 차단 + 신규 결제 활성화 차단. 이미 활성화된 구독은 만료 시까지 정상 유지.</td>
+<td style="border: 1px solid #ccc; padding: 8px;">신규 스마트 예약 보조 가동 차단 + 신규 결제 활성화 차단. 이미 활성화된 구독은 만료 시까지 정상 유지.</td>
 </tr>
 <tr>
 <td style="border: 1px solid #ccc; padding: 8px;"><strong>결제 fingerprint</strong> — 선택</td>
@@ -231,7 +231,7 @@ a { color: #0070c9; }
 </tr>
 <tr>
 <td style="border: 1px solid #ccc; padding: 8px;"><strong>친구 추천 보상 시스템</strong> — 선택</td>
-<td style="border: 1px solid #ccc; padding: 8px;">추천 코드 발급·입력·보상 지급 비활성화. 기타 모든 기능 (자동 예약 보조·결제·검색·승차권) 정상.</td>
+<td style="border: 1px solid #ccc; padding: 8px;">추천 코드 발급·입력·보상 지급 비활성화. 기타 모든 기능 (스마트 예약 보조·결제·검색·승차권) 정상.</td>
 </tr>
 </tbody>
 </table>
