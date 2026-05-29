@@ -131,8 +131,8 @@ a { color: #0070c9; }
 <li><strong>추천 이력:</strong> 추천 코드 발급/입력 시점, 보상 지급/회수 이력, 추천인·친구 보상 일수, 처리 방식 (Google Play 구독 만료 연장 / 클라이언트 활성 일수 추가)</li>
 <li><strong>어뷰징 차단용 fingerprint:</strong>
   <ul>
-  <li>신청 시점의 IP 주소 (24시간 내 같은 IP 다중 가입 차단 목적, 본인 식별 X)</li>
-  <li>기기 식별자 해시 (30일 내 같은 단말 다중 가입 차단 목적)</li>
+  <li>신청 시점의 IP 주소 (단기간 같은 IP 다중 가입 차단 목적, 본인 식별 X). 추천 이력의 일부로 보관되며, <strong>계정 삭제 시 함께 파기됩니다.</strong></li>
+  <li>기기 식별자 해시 (부정 이용 차단 목적). 같은 단말기가 1회 추천 코드를 입력(등록)하면 영구 차단 sentinel(redeemed_referrals)로 처리되며, <strong>재설치·재가입을 통한 우회를 막기 위해 계정 삭제 후에도 보관될 수 있습니다.</strong></li>
   </ul>
 </li>
 <li><strong>보상 지급 일수 (A안 정책):</strong> 친구는 추천인 상태와 무관하게 항상 <strong>14일 프리미엄 무료</strong>를 받습니다. 추천인은 본인이 유료 자동 갱신 구독자이면 <strong>30일</strong>, 그 외 (무료 사용자) 면 <strong>14일</strong> 프리미엄 무료를 받습니다.</li>
@@ -141,7 +141,7 @@ a { color: #0070c9; }
 <li><strong>환불 시 보상 회수:</strong> Google Play 환불 알림(RTDN) 수신 시 자동으로 보상이 회수됩니다.</li>
 </ul>
 <p style="font-size: 0.9em; color: #666;"><em>* 자동 갱신 구독 = 월 / 3개월 / 6개월 / 연 단위 결제. <strong>24시간 이용권 / 7일 이용권은 제외</strong>입니다.</em></p>
-<p>저장 위치: <strong>Firebase Firestore</strong> (referral_codes / referrals / referral_rewards 컬렉션). 미동의 사용자에 대해서는 위 정보가 일체 생성되지 않습니다.</p>
+<p>저장 위치: <strong>Firebase Firestore</strong> (referral_codes / referrals / referral_rewards / redeemed_referrals 컬렉션). 미동의 사용자에 대해서는 위 정보가 일체 생성되지 않습니다.</p>
 
 <h3>1.8 보안 검증 정보 (필수)</h3>
 <div class="info">
@@ -188,7 +188,7 @@ a { color: #0070c9; }
 <strong>기기 내부 저장 정보:</strong> 앱 삭제 시까지 보관됩니다.<br/>
 <strong>동기화 데이터:</strong> 로그아웃 또는 계정 삭제 시 서버에서 삭제됩니다. 사용자는 설정에서 언제든지 동기화 데이터를 삭제할 수 있습니다.<br/>
 <strong>분리 동의 이력 (스마트 예약 보조 / Integrity / deviceHash / 결제 fingerprint / 친구 추천):</strong> 서비스 이용 증명 및 분쟁 예방을 위해 Firebase Firestore에 영구 보관됩니다.<br/>
-<strong>친구 추천 이력 (referral_codes / referrals / referral_rewards):</strong> 어뷰징 차단 및 보상 회수 추적을 위해 Firebase Firestore에 영구 보관됩니다.<br/>
+<strong>친구 추천 이력 (referral_codes / referrals / referral_rewards):</strong> 어뷰징 차단 및 보상 회수 추적을 위해 보관되며, <strong>계정 삭제 시 파기됩니다.</strong> 다만 재설치·재가입을 통한 부정 이용을 차단하기 위해, 해시 처리된 기기 식별자 sentinel(redeemed_referrals/&#123;기기해시&#125;)은 <strong>계정 삭제 후에도 영구 보관될 수 있습니다.</strong><br/>
 <strong>보안 검증 이력 (integrity_verdicts):</strong> 어뷰징 패턴 분석을 위해 30일간 보관 후 자동 만료됩니다 (rolling window).<br/>
 <strong>결제 이력 (payments):</strong> 환불 처리 및 보상 회수 정확도를 위해 Firebase Firestore에 영구 보관됩니다.<br/>
 <strong>무료 체험 관리 정보:</strong> 오남용 방지를 위해 Firebase Firestore에 영구 보관됩니다.
@@ -273,7 +273,7 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-05-10 (A안 친구 추천 정책 §1.7 / 결제 보안 동의 게이트 §1.8 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
+<p><strong>최종 수정일:</strong> 2026-05-30 (§1.7·§4 친구 추천 보유기간 정합화 — 기기 식별자 해시 sentinel의 계정 삭제 후 영구 보관 및 IP·추천 이력의 계정 삭제 시 파기 명시) / 2026-05-10 (A안 친구 추천 정책 §1.7 / 결제 보안 동의 게이트 §1.8 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
 
 </body>
 </html>
