@@ -15,8 +15,8 @@
     }
     h1, h2, h3 { color: #111; margin-top: 24px; }
     a { color: #0070c9; }
-    .highlight { background-color: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin: 12px 0; }
-    .info { background-color: #d1ecf1; padding: 10px; border-left: 4px solid #17a2b8; margin: 12px 0; }
+    .highlight { background-color: #fff3cd; padding: 12px 14px; border-radius: 8px; margin: 12px 0; }
+    .info { background-color: #d1ecf1; padding: 12px 14px; border-radius: 8px; margin: 12px 0; }
     table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.95em; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
     th { background-color: #f0f0f0; }
@@ -27,7 +27,7 @@
 
 <h1>레일픽(RailPick) 데이터 삭제 안내</h1>
 
-<p><strong>앱:</strong> 레일픽(RailPick) — Android 기차 예약 보조 앱<br/>
+<p><strong>앱:</strong> 레일픽(RailPick), Android 기차 예약 보조 앱<br/>
 <strong>개발자:</strong> RailPick<br/>
 <strong>문의:</strong> <a href="mailto:j23488sh@gmail.com">j23488sh@gmail.com</a></p>
 
@@ -138,7 +138,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>결제 이력 (orderId hash, 결제 상품, 환불 여부 등 — 카드 정보 미포함)</td>
+      <td>결제 이력 (orderId hash, 결제 상품, 환불 여부 등. 카드 정보 미포함)</td>
       <td>Firebase Firestore (<code>payments</code>, <code>device_payments</code>)</td>
       <td>환불 처리 / 보상 회수 정확도 / Google Play 환불 알림(RTDN) 추적</td>
     </tr>

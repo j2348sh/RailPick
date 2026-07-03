@@ -15,9 +15,9 @@ color: #222;
 }
 h1, h2, h3 { color: #111; }
 a { color: #0070c9; }
-.highlight { background-color: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin: 10px 0; }
-.warning { background-color: #f8d7da; padding: 10px; border-left: 4px solid #dc3545; margin: 10px 0; }
-.info { background-color: #d1ecf1; padding: 10px; border-left: 4px solid #17a2b8; margin: 10px 0; }
+.highlight { background-color: #fff3cd; padding: 12px 14px; border-radius: 8px; margin: 10px 0; }
+.warning { background-color: #f8d7da; padding: 12px 14px; border-radius: 8px; margin: 10px 0; }
+.info { background-color: #d1ecf1; padding: 12px 14px; border-radius: 8px; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -135,10 +135,10 @@ a { color: #0070c9; }
   <li>기기 식별자 해시 (부정 이용 차단 목적). 같은 단말기가 1회 추천 코드를 입력(등록)하면 영구 차단 sentinel(redeemed_referrals)로 처리되며, <strong>재설치·재가입을 통한 우회를 막기 위해 계정 삭제 후에도 보관될 수 있습니다.</strong></li>
   </ul>
 </li>
-<li><strong>보상 지급 일수 (A안 정책):</strong> 친구는 추천인 상태와 무관하게 항상 <strong>14일 프리미엄 무료</strong>를 받습니다. 추천인은 본인이 유료 자동 갱신 구독자이면 <strong>30일</strong>, 그 외 (무료 사용자) 면 <strong>14일</strong> 프리미엄 무료를 받습니다.</li>
+<li><strong>보상 지급 일수 (A안 정책):</strong> 추천인은 친구가 코드를 입력(검증 통과)하면 결제 여부와 무관하게 <strong>초대 보상 5일</strong>을 수 분 내 받습니다. 추가로, 친구는 추천인 상태와 무관하게 항상 <strong>14일 프리미엄 무료</strong>를 받고, 추천인은 본인이 유료 자동 갱신 구독자이면 <strong>30일</strong>, 그 외 (무료 사용자) 면 <strong>14일</strong> 프리미엄 무료를 받습니다 (성과 보상, 친구의 구독 결제 + 7일 유지 시).</li>
 <li><strong>보상 처리 방식:</strong> 활성 자동 갱신 구독* 사용자의 경우 Google Play 의 <strong>구독 만료 시각을 직접 연장</strong>합니다 (Google Play Developer API의 purchases.subscriptions.defer 호출). 사용자의 결제 정보, 카드 데이터, 결제 수단 정보는 처리하지 않습니다.</li>
-<li><strong>결제일 자동 연장 한도:</strong> 호출 시점 기준 <strong>누적 2년 한도</strong> 내에서 적용됩니다. 월 30일 보상 기준 누적 약 24명까지 자동 연장 형태로 지급되며, 한도 초과 시 그 이후 추천 보상은 자동으로 앱 내 프리미엄 활성 일수 추가 형태로 전환됩니다.</li>
-<li><strong>환불 시 보상 회수:</strong> Google Play 환불 알림(RTDN) 수신 시 자동으로 보상이 회수됩니다.</li>
+<li><strong>결제일 자동 연장 한도:</strong> 호출 시점 기준 <strong>누적 2년 한도</strong> 내에서 적용됩니다. 추천 1건당 최대 35일(초대 5일 + 성과 30일) 기준 누적 약 20명까지 자동 연장 형태로 지급되며, 한도 초과 시 그 이후 추천 보상은 자동으로 앱 내 프리미엄 활성 일수 추가 형태로 전환됩니다.</li>
+<li><strong>환불 시 보상 회수:</strong> Google Play 환불 알림(RTDN) 수신 시 자동으로 성과 보상이 회수됩니다. 초대 보상(5일)은 회수 대상이 아닙니다.</li>
 </ul>
 <p style="font-size: 0.9em; color: #666;"><em>* 자동 갱신 구독 = 월 / 3개월 / 6개월 / 연 단위 결제. <strong>24시간 이용권 / 7일 이용권은 제외</strong>입니다.</em></p>
 <p>저장 위치: <strong>Firebase Firestore</strong> (referral_codes / referrals / referral_rewards / redeemed_referrals 컬렉션). 미동의 사용자에 대해서는 위 정보가 일체 생성되지 않습니다.</p>
@@ -218,19 +218,19 @@ a { color: #0070c9; }
 </thead>
 <tbody>
 <tr>
-<td style="border: 1px solid #ccc; padding: 8px;"><strong>단말 무결성 검증 (Play Integrity)</strong> — 필수</td>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>단말 무결성 검증 (Play Integrity)</strong> (필수)</td>
 <td style="border: 1px solid #ccc; padding: 8px;">신규 스마트 예약 보조 가동 차단 + 신규 자동 갱신 구독 / 일회성 패스 결제 활성화 차단. 일반 검색·승차권 조회는 정상 사용 가능. <strong>이미 활성화된 구독·체험은 만료 시까지 정상 유지</strong>되며, 환불·해지 권리도 정상 행사 가능.</td>
 </tr>
 <tr>
-<td style="border: 1px solid #ccc; padding: 8px;"><strong>기기 식별자 (deviceHash)</strong> — 필수</td>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>기기 식별자 (deviceHash)</strong> (필수)</td>
 <td style="border: 1px solid #ccc; padding: 8px;">신규 스마트 예약 보조 가동 차단 + 신규 결제 활성화 차단. 이미 활성화된 구독은 만료 시까지 정상 유지.</td>
 </tr>
 <tr>
-<td style="border: 1px solid #ccc; padding: 8px;"><strong>결제 fingerprint</strong> — 선택</td>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>결제 fingerprint</strong> (선택)</td>
 <td style="border: 1px solid #ccc; padding: 8px;">자동 환불 회수 정확도 일부 저하. 기타 모든 기능 정상.</td>
 </tr>
 <tr>
-<td style="border: 1px solid #ccc; padding: 8px;"><strong>친구 추천 보상 시스템</strong> — 선택</td>
+<td style="border: 1px solid #ccc; padding: 8px;"><strong>친구 추천 보상 시스템</strong> (선택)</td>
 <td style="border: 1px solid #ccc; padding: 8px;">추천 코드 발급·입력·보상 지급 비활성화. 기타 모든 기능 (스마트 예약 보조·결제·검색·승차권) 정상.</td>
 </tr>
 </tbody>
@@ -273,7 +273,7 @@ a { color: #0070c9; }
 
 <hr/>
 
-<p><strong>최종 수정일:</strong> 2026-05-30 (§1.7·§4 친구 추천 보유기간 정합화 — 기기 식별자 해시 sentinel의 계정 삭제 후 영구 보관 및 IP·추천 이력의 계정 삭제 시 파기 명시) / 2026-05-10 (A안 친구 추천 정책 §1.7 / 결제 보안 동의 게이트 §1.8 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
+<p><strong>최종 수정일:</strong> 2026-07-03 (§1.7 초대 보상 5일 신설 반영: 친구 코드 입력 시 추천인에게 수 분 내 지급, 환불 회수 제외) / 2026-05-30 (§1.7·§4 친구 추천 보유기간 정합화: 기기 식별자 해시 sentinel의 계정 삭제 후 영구 보관 및 IP·추천 이력의 계정 삭제 시 파기 명시) / 2026-05-10 (A안 친구 추천 정책 §1.7 / 결제 보안 동의 게이트 §1.8 / Google Play Integrity API §3 / 항목별 동의 거부 결과 §5.1 / 처리방침 변경 §9)</p>
 
 </body>
 </html>
